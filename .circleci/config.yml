@@ -1,7 +1,7 @@
 version: 2
 jobs:
   ruby-2.6.3:
-    parallelism: 4
+    parallelism: 6
     docker:
     - image: circleci/ruby:2.6.3-stretch-node
       environment:
