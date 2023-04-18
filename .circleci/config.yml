@@ -18,6 +18,7 @@ jobs:
       - run: aws s3 ls s3://circleci-oidc-example
       # parameter store
       - aws-parameter-store/load
+        filter: "Key=Name,Values=/circleci/oidc/test"
 
 workflows:
   oidc:
