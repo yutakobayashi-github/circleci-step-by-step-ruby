@@ -1,0 +1,23 @@
+version: 2.1
+
+orbs:
+  # import CircleCI's aws-cli orb
+  aws-cli: circleci/aws-cli@3.1
+
+jobs:
+  aws-oidc:
+    docker:
+      - image: cimg/aws:2022.06
+    steps:
+      - checkout
+      - aws-cli/assume-role-with-web-identity:
+          role-arn: arn:aws:iam::443553437457:role/circleci-oidc-example-role # 作成した IAM ロールの ARN
+
+      # プライベートな S3 バケットを読み取ってみる
+      - run: aws s3 ls s3://circleci-oidc-example
+
+workflows:
+  oidc:
+    jobs:
+      - aws-oidc:
+          context: aws-matsunaga # Context を設定しないと OIDC が使用できないので注意
