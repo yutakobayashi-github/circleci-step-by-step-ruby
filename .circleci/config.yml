@@ -4,23 +4,24 @@ version: 2.1
 orbs:
   # import CircleCI's aws-cli orb
   aws-cli: circleci/aws-cli@3.1
-  # Load AWS Parameter Store keys as environment variables.
-  aws-parameter-store: circleci/aws-parameter-store@1.0.0
 
 jobs:
   aws-oidc:
     docker:
       - image: cimg/aws:2022.06
     environment:
-      AWS_ROLE_ARN: arn:aws:iam::443553437457:role/circleci-oidc-example-role
+      AWS_ROLE_ARN: arn:aws:iam::443553437457:role/circleci-oidc-example-role # 作成した IAM ロールの ARN
     steps:
+      # orbsでAWS認証
       - aws-cli/assume-role-with-web-identity:
-          role-arn: arn:aws:iam::443553437457:role/circleci-oidc-example-role # 作成した IAM ロールの ARN
+          role-arn: $AWS_ROLE_ARN
       # プライベートな S3 バケットを読み取ってみる
       - run: aws s3 ls s3://circleci-oidc-example
-      - run: aws ssm get-parameters-by-path --path "/" --recursive
+      # パラメータストアの値を読み取ってみる
+      - run: aws ssm get-parameters-by-path --path "/circleci" --recursive
+      # AWS認証と接続（orbs使わない場合）
       - run:
-         name: 認証と接続
+         name: AWS認証と接続（orbs使わない場合）
          command: |
           # OpenID Connect トークンを使用して AWS 認証情報を取得
           read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
@@ -34,14 +35,9 @@ jobs:
           export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
           # AWS で処理を実行
           # aws sts get-caller-identity
-      # parameter store
-      # - run: mkdir /tmp/parameterstore
-      # - run: ls
-      # - aws-parameter-store/load:
-      #     filter: "Key=Name,Values=/circleci/oidc/test"
 
 workflows:
   oidc:
     jobs:
       - aws-oidc:
-          context: aws-matsunaga # Context を設定しないと OIDC が使用できないので注意
+          context: aws-matsunaga # 何かしら（空でも）Contextを設定しないとOIDCが使用できないので注意
