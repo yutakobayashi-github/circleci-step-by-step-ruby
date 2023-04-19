@@ -19,8 +19,8 @@ jobs:
       # プライベートな S3 バケットを読み取ってみる
       - run: aws s3 ls s3://circleci-oidc-example
       - run:
-        name: 認証と接続
-        command: |
+         name: 認証と接続
+         command: |
           # OpenID Connect トークンを使用して AWS 認証情報を取得
           read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
             $(aws sts assume-role-with-web-identity \
