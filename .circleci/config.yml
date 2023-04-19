@@ -5,7 +5,7 @@ orbs:
   # import CircleCI's aws-cli orb
   aws-cli: circleci/aws-cli@3.1
   # Load AWS Parameter Store keys as environment variables.
-  aws-parameter-store: circleci/aws-parameter-store@1.0.0
+  aws-parameter-store: deepdivedevinc/aws-parameter-store@1.0.1
 
 jobs:
   aws-oidc:
@@ -18,8 +18,8 @@ jobs:
       # プライベートな S3 バケットを読み取ってみる
       - run: aws s3 ls s3://circleci-oidc-example
       # parameter store
-      - aws-parameter-store/load:
-          filter: "Key=Name,Values=/circleci/oidc/test"
+      - aws-parameter-store/load
+      # filter: "Key=Name,Values=/circleci/oidc/test"
 
 workflows:
   oidc:
