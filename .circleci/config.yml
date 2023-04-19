@@ -18,6 +18,7 @@ jobs:
           role-arn: arn:aws:iam::443553437457:role/circleci-oidc-example-role # 作成した IAM ロールの ARN
       # プライベートな S3 バケットを読み取ってみる
       - run: aws s3 ls s3://circleci-oidc-example
+      - run: aws ssm get-parameters-by-path --path "/circleci/oidc/test" --recursive
       - run:
          name: 認証と接続
          command: |
@@ -34,10 +35,10 @@ jobs:
           # AWS で処理を実行
           # aws sts get-caller-identity
       # parameter store
-      - run: mkdir /tmp/parameterstore
-      - run: ls
-      - aws-parameter-store/load:
-          filter: "Key=Name,Values=/circleci/oidc/test"
+      # - run: mkdir /tmp/parameterstore
+      # - run: ls
+      # - aws-parameter-store/load:
+      #     filter: "Key=Name,Values=/circleci/oidc/test"
 
 workflows:
   oidc:
