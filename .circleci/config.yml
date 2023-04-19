@@ -34,7 +34,7 @@ jobs:
              --output text)
           export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
           # AWS で処理を実行
-          # aws sts get-caller-identity
+          # 例) aws sts get-caller-identity
 
 workflows:
   oidc:
