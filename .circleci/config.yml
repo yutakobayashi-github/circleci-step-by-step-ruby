@@ -30,7 +30,9 @@ jobs:
                   - checkout
                   - node/install-packages:
                       override-ci-command: npm install
-                      cache-path: ~/project/node_modules 
+                      cache-path: ~/project/node_modules
+            >>
+            EOF
       - continuation/continue:
           configuration_path: configs/generated_config.yml # use newly generated config to continue
 
