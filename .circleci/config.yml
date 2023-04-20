@@ -9,19 +9,33 @@ orbs:
 
 # our defined job, and its steps
 jobs:
-  setup:
+  generate-config:
     executor: continuation/default
     steps:
       - checkout # checkout code
       - run: # run a command
           name: Generate config # 動的にconfigファイルを用意する処理
           command: |
-            # ./generate-config > generated_config.yml
+            mkdir configs/
+            cat << EOF > configs/generated_config.yml
+            version: 2.1
+            orbs:
+              docker: circleci/docker@1.5.0
+              node: circleci/node@4.2.0
+            jobs:
+              scan_app:
+                docker:
+                  - image: circleci/node:12
+                steps:
+                  - checkout
+                  - node/install-packages:
+                      override-ci-command: npm install
+                      cache-path: ~/project/node_modules 
       - continuation/continue:
-          configuration_path: .circleci/generated_config.yml # use newly generated config to continue
+          configuration_path: configs/generated_config.yml # use newly generated config to continue
 
 # our single workflow, that triggers the setup job defined above
 workflows:
   setup:
     jobs:
-      - setup
+      - generate-config
