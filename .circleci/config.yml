@@ -17,7 +17,7 @@ jobs:
           name: Generate config # 動的にconfigファイルを用意する処理
           command: |
             mkdir configs
-            cat << EOF > configs/generated_config.yml
+            cat \<< EOF > configs/generated_config.yml
             version: 2.1
             orbs:
               docker: circleci/docker@1.5.0
