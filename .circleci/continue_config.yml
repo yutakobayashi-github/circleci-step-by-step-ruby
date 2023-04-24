@@ -1,0 +1,76 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@x.y
+  ruby: circleci/ruby@x.y
+
+# the default pipeline parameters, which will be updated according to
+# the results of the path-filtering orb
+parameters:
+  run-test-views-job:
+    type: boolean
+    default: false
+  run-test-controllers-job:
+    type: boolean
+    default: false
+
+# here we specify our workflows, most of which are conditionally
+# executed based upon pipeline parameter values. Each workflow calls a
+# specific job defined above, in the jobs section.
+workflows:
+  # when pipeline parameter, run-test-views-job is true, the
+  # test-1 job is triggered.
+  test-1:
+    when: << pipeline.parameters.rrun-test-views-job >>
+    jobs:
+      test:
+        docker:
+          - image: cimg/ruby:2.7-node
+          - environment:
+              POSTGRES_DB: rails_blog_test
+              POSTGRES_PASSWORD: ''
+              POSTGRES_USER: circleci-demo-ruby
+            image: circleci/postgres:9.5-alpine
+        environment:
+          BUNDLE_JOBS: '3'
+          BUNDLE_RETRY: '3'
+          PGHOST: 127.0.0.1
+          PGPASSWORD: ''
+          PGUSER: circleci-demo-ruby
+          RAILS_ENV: test
+        steps:
+          - checkout
+          - ruby/install-deps
+          - node/install-packages:
+              cache-key: yarn.lock
+              pkg-manager: yarn
+          - run:
+              command: dockerize -wait tcp://localhost:5432 -timeout 1m
+              name: Wait for DB
+          - run:
+              command: bundle exec rails db:schema:load --trace
+              name: Database setup
+          - ruby/rspec-test:
+              include: spec/views/**/*_spec.rb
+  # when pipeline parameter, run-test-controllers-job is true, the
+  # test-2 job is triggered.
+  test-2:
+    when: << pipeline.parameters.run-test-controllers-job >>
+    jobs:
+      test:
+        docker:
+          - image: cimg/ruby:2.7-node
+    
+  # when pipeline parameter, run-test-views-job OR
+  # run-test-controllers-job is true, run-integration-tests job is
+  # triggered. see:
+  # https://circleci.com/docs/configuration-reference/#logic-statements
+  # for more information.
+  run-integration-tests:
+    when:
+      or: [<< pipeline.parameters.run-test-views-job >>, << pipeline.parameters.run-test-controllers-job >>]
+    jobs:
+      - maven/test:
+          name: run-integration-tests
+          command: '-X verify'
+          app_src_directory: 'tests'
