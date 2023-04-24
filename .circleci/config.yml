@@ -20,9 +20,9 @@ workflows:
           # line:
           # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
           mapping: |
-            app/views/.* run-test-views-job true
-            app/controllers/.* run-test-controllers-job true
-          base-revision: main
+            views/.* run-test-views-job true
+            controllers/.* run-test-controllers-job true
+          base-revision: app
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
           # complete. In this case, we are using the parent dynamic
