@@ -38,9 +38,6 @@ jobs:
           include: spec/controllers/*_spec.rb
 
 
-# here we specify our workflows, most of which are conditionally
-# executed based upon pipeline parameter values. Each workflow calls a
-# specific job defined above, in the jobs section.
 workflows:
   # when pipeline parameter, run-test-views-job is true, the
   # test-1 job is triggered.
@@ -60,11 +57,3 @@ workflows:
   # triggered. see:
   # https://circleci.com/docs/configuration-reference/#logic-statements
   # for more information.
-  # run-integration-tests:
-  #   when:
-  #     or: [<< pipeline.parameters.run-test-views-job >>, << pipeline.parameters.run-test-controllers-job >>]
-  #   jobs:
-  #     - maven/test:
-  #         name: run-integration-tests
-  #         command: '-X verify'
-  #         app_src_directory: 'tests'
