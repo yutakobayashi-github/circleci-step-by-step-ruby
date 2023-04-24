@@ -31,6 +31,10 @@ jobs:
                   - node/install-packages:
                       override-ci-command: npm install
                       cache-path: ~/project/node_modules
+            workflows:
+              continue_workflow:
+                jobs:
+                  - scan_app
             EOF
       - continuation/continue:
           configuration_path: configs/generated_config.yml # use newly generated config to continue
