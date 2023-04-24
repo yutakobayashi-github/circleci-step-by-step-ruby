@@ -96,6 +96,7 @@ workflows:
   test-2:
     when: << pipeline.parameters.run-test-controllers-job >>
     jobs:
+      - build
       - controllers-test:
           requires:
             - build
