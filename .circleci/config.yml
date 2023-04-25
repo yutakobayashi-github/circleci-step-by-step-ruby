@@ -3,15 +3,9 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:2.7-node
-        environment:
-          POSTGRES_USER: circleci-demo-ruby
-          POSTGRES_DB: rails_blog
-          POSTGRES_PASSWORD: ''
     steps:
       - checkout
-      - run: echo "Hello CircleCI!"
-      - run:
-          name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: ruby --version
+      - run: node --version
 
 
