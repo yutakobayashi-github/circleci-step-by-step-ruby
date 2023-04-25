@@ -39,10 +39,14 @@ workflows:
       - hold: # <<< ジョブの続きを実行するには CircleCI の Web ページ上で手動で承認する必要があります。
           type: approval
       - "ruby-27"
+          requires:
+            - hold
       - "ruby-30":
           filters:
             branches:
               only: step3-workflows-sequential
+          requires:
+            - ruby-27
       - "ruby-32":
           filters:
             branches:
