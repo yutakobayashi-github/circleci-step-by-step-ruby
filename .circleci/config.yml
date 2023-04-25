@@ -25,7 +25,7 @@ jobs:
       - run: node --version
 
 workflows:
-  build:
+  sequential-job:
     jobs:
       - "ruby-27"
       - "ruby-30":
@@ -34,6 +34,21 @@ workflows:
       - "ruby-32":
           requires:
             - "ruby-30"
+  conditional-job:
+    jobs:
+      - hold: # <<< ジョブの続きを実行するには CircleCI の Web ページ上で手動で承認する必要があります。
+          type: approval
+      - "ruby-27"
+      - "ruby-30":
+          filters:
+            branches:
+              only: step3-workflows-sequential
+      - "ruby-32":
+          filters:
+            branches:
+              only: master
+  # sequential-reverse-job:
+    jobs: # ジョブ “ruby-32” → “ruby-30” → “ruby-27” の順でビルドするワークフローを定義してください。
 
 
 
