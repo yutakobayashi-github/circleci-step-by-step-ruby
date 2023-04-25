@@ -38,7 +38,7 @@ workflows:
     jobs:
       - hold: # <<< ジョブの続きを実行するには CircleCI の Web ページ上で手動で承認する必要があります。
           type: approval
-      - "ruby-27"
+      - "ruby-27":
           requires:
             - hold
       - "ruby-30":
