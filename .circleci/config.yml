@@ -1,10 +1,5 @@
 version: 2.1
 
-orbs:
-  node: circleci/node@5.1.0
-  ruby: circleci/ruby@2.0.0
-
-
 jobs:
   ruby-test:
     docker:
@@ -23,29 +18,30 @@ jobs:
           POSTGRES_USER: circleci-demo-ruby
     steps:
       - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - run:
+          name: Yarn Install
+          command: yarn install --cache-folder ~/.cache/yarn
       - run:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
           name: Wait for DB
       - run:
           command: bin/rails db:schema:load --trace
           name: Database setup
-      - ruby/rspec-test:
-          include: spec/**/*_spec.rb
-      # - run:
-      #     name: Run rspec
-      #     command: |
-      #       bundle exec rspec --profile 10 \
-      #                         --format RspecJunitFormatter \
-      #                         --out test_results/rspec.xml \
-      #                         --format progress \
-      #                         spec/**/*_spec.rb
-      # - store_test_results:
-      #     path: test_results
-      # - store_artifacts:
-      #     path: test_results
+      - run:
+          name: Run rspec
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              spec/**/*_spec.rb
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: test_results
 
 workflows:
   build:
