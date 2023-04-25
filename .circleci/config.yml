@@ -22,7 +22,7 @@ workflows:
           mapping: |
             app/views/.* run-test-views-job true
             app/controllers/.* run-test-controllers-job true
-          base-revision: path-filtering
+          base-revision: step8-path-filtering
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
           # complete. In this case, we are using the parent dynamic
