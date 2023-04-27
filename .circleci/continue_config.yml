@@ -4,8 +4,6 @@ orbs:
   node: circleci/node@5.1.0
   ruby: circleci/ruby@2.0.0
 
-# the default pipeline parameters, which will be updated according to
-# the results of the path-filtering orb
 parameters:
   run-test-views-job:
     type: boolean
@@ -100,9 +98,3 @@ workflows:
       - controllers-test:
           requires:
             - build
-    
-  # when pipeline parameter, run-test-views-job OR
-  # run-test-controllers-job is true, run-integration-tests job is
-  # triggered. see:
-  # https://circleci.com/docs/configuration-reference/#logic-statements
-  # for more information.
