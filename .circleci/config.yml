@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   ruby-test:
-    # parallelism: 3
+    parallelism: 3
     docker:
       - image: cimg/ruby:2.7-node
         environment:
@@ -55,7 +55,7 @@ jobs:
                             --out test_results/rspec.xml \
                             --format progress \
                             spec/**/*_spec.rb
-                            # $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
+                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
       - store_test_results:
           path: test_results
       - store_artifacts:
