@@ -30,18 +30,18 @@ jobs:
       - run:
           command: bin/rails db:schema:load --trace
           name: Database setup
-      # - run: # <<< rubyのテストを実行
-      #     name: Run rspec
-      #     command: |
-      #       bundle exec rspec --profile 10 \
-      #                         --format RspecJunitFormatter \
-      #                         --out test_results/rspec.xml \
-      #                         --format progress \
-      #                         spec/**/*_spec.rb
-      # - store_test_results: # <<< テスト結果を保存
-      #     path: test_results
-      # - store_artifacts: # <<< ビルド結果を保存
-      #     path: test_results
+      - run: # <<< rubyのテストを実行
+          name: Run rspec
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              spec/**/*_spec.rb
+      - store_test_results: # <<< テスト結果を保存
+          path: test_results
+      - store_artifacts: # <<< ビルド結果を保存
+          path: test_results
 
 workflows:
   build:
