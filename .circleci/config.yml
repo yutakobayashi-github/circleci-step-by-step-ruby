@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   ruby-test:
-    # parallelism: 3
+    parallelism: 3
     docker:
       - image: cimg/ruby:2.7-node
         environment:
