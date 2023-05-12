@@ -54,7 +54,7 @@ jobs:
                             --format RspecJunitFormatter \
                             --out test_results/rspec.xml \
                             --format progress \
-                            spec/**/*_spec.rb
+                            spec/**/*_spec.rb \
                             $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
       - store_test_results:
           path: test_results
