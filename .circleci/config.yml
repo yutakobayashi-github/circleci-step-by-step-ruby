@@ -1,8 +1,8 @@
 version: 2.1
 
-# orbs:
-#   node: circleci/node@5.1.0
-#   ruby: circleci/ruby@2.0.0
+orbs:
+  node: circleci/node@5.1.0
+  ruby: circleci/ruby@2.0.0
 
 jobs:
   ruby-test:
@@ -22,28 +22,28 @@ jobs:
           POSTGRES_USER: circleci-demo-ruby
     steps:
       - checkout
-      # - restore_cache:
-      #     keys:
-      #       - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
-      #       - rails-demo-bundle-v2-
+      - restore_cache:
+          keys:
+            - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - rails-demo-bundle-v2-
       - run:
           name: Bundle Install
           command: bundle check || bundle install
-      # - save_cache:
-      #     key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
-      #     paths:
-      #       - vendor/bundle
-      # - restore_cache:
-      #     keys:
-      #       - rails-demo-yarn-{{ checksum "yarn.lock" }}
-      #       - rails-demo-yarn-
+      - save_cache:
+          key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - restore_cache:
+          keys:
+            - rails-demo-yarn-{{ checksum "yarn.lock" }}
+            - rails-demo-yarn-
       - run:
           name: Yarn Install
           command: yarn install --cache-folder ~/.cache/yarn
-      # - save_cache:
-      #     key: rails-demo-yarn-{{ checksum "yarn.lock" }}
-      #     paths:
-      #       - ~/.cache/yarn
+      - save_cache:
+          key: rails-demo-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - run:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
           name: Wait for DB
