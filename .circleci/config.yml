@@ -51,8 +51,8 @@ workflows:
           filters:
             branches:
               only: master
-  # sequential-reverse-job:
-    # jobs: #  <<< ジョブ “ruby-32” → “ruby-30” → “ruby-27” の順でビルドするワークフローを定義してください。
+  sequential-reverse-job:
+    jobs: #  <<< ジョブ “ruby-32” → “ruby-30” → “ruby-27” の順でビルドするワークフローを定義してください。
 
 
 
